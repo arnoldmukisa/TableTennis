@@ -2,6 +2,7 @@
 var myApp = new Framework7({
 	material: true,
 	modalTitle: 'Table Tenis',
+	pushState : true
 });
 // Export selectors engine
 var $$ = Dom7;
@@ -46,7 +47,7 @@ var user = firebase.auth().currentUser;
 
 window.addEventListener('load', function() {
 	authState('load');
-	playerContentIndex(3, 'rating');
+	// playerContentIndex(3, 'rating');
 });
 
 
