@@ -1,0 +1,145 @@
+<!-- add-game Page-->
+<div data-page="add-game" class="page toolbar-fixed">
+    <!-- Add Game Navbar-->
+    <div class="navbar">
+        <div class="navbar-inner" data-page="add-game">
+            <!-- We have index navbar without left link-->
+            <div class="left">
+                <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+            <div class="center">Add Game</div>
+            <div class="right">
+                <!-- Right link contains only icon - additional "icon-only" class-->
+                <div class="right">
+									<a href="#" class="link icon-only open-popover" data-popover=".popover-links">
+											<i class="f7-icons">more_vertical</i>
+									</a>
+								</div>
+            </div>
+        </div>
+    </div>
+    <!-- EOf add-game Navbar -->
+    <!-- add-game Toolbar-->
+    <div class="toolbar tabbar tabbar-labels-fixed">
+      <div class="toolbar-inner">
+          <a href="index.html" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">home</i>
+          <!-- <span class="tabbar-label">Home</span> -->
+          </a>
+          <a href="add-game.html" class="link active"><i class="icon f7-icons">add_round</i>
+          <!-- <span class="tabbar-label">Add Game</span> -->
+          </a>
+          <a href="players.html" class="link"><i class="icon f7-icons">persons</i>
+            <!-- <span class="tabbar-label">Players</span> -->
+          </a>
+          <a href="timeline.html" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">time</i>
+            <!-- <span class="tabbar-label">Timeline</span> -->
+          </a>
+      </div>
+    </div>
+    <!-- EOf add-game toolbar -->
+
+    <!-- Scrollable page content-->
+    <div class="page-content pull-to-refresh-content" data-ptr-distance="55">
+
+      <div class="popover popover-links">
+         <div class="popover-angle"></div>
+         <div class="popover-inner">
+           <div class="list-block">
+            <ul>
+            <li><a href="#" class="link center"><div class="item-content">
+              <div class="item-inner"><div class="item-title">Help</div></div></div></a>
+            </li>
+            <li><a href="#" class="link log-out"><div class="item-content">
+              <div class="item-inner"><div class="item-title">Logout</div></div></div></a>
+            </li>
+            </ul>
+           </div>
+         </div>
+       </div>
+        <!-- Default pull to refresh layer-->
+        <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+        </div>
+        <div class="content-block-title">Enter Game Scores:</div>
+
+        <div class="card">
+
+            <div class="center card-header bg-bluegray color-white welcomeName"></div>
+
+            <div class="card-content">
+                <div class="card-content-inner">
+
+                    <form id="UserScoreForm" class="list-block">
+                        <ul>
+                            <li>
+                                <div class="item-content inset">
+                                <div class="item-media"><i class="icon f7-icons">compose</i></div>
+                                    <div class="item-inner">
+                                        <div class="item-title label">Enter Your Score</div>
+                                        <div class="item-input">
+                                            <input type="text" name="UserScore" id="" placeholder="Your Score Here">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+            <!-- <div class="card-footer">Your rating is<i class="rating"> </i> <i class="material-icons">grade</i></div> -->
+        </div>
+
+        <div class="content-block-title">Enter Opponent's Score</div>
+
+        <div class="card">
+            <div class="center card-header bg-bluegray color-white">Opponent</div>
+            <div class="card-content">
+                <div class="card-content-inner">
+
+                    <form id="OpponentScoreForm" class="list-block ajax-submit">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                <div class="item-media"><i class="icon f7-icons">persons_fill</i></div>
+                                    <div class="item-inner">
+                                        <div class="item-title label">Find Opponent's Name</div>
+                                        <div class="item-input">
+                                            <input type="text" name="OpponentName" placeholder="Player's Names" id="autocomplete-dropdown-all">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content">
+                                <div class="item-media"><i class="icon f7-icons">compose</i></div>
+                                    <div class="item-inner">
+                                        <div class="item-title label">Enter Opponnent's Score</div>
+                                        <div class="item-input">
+                                            <input type="text" name="OpponentScore" placeholder="Opponent's Score">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <div class="row">
+                <div class="col-50">
+                    <a href="#" class=""><input type="" name="" class="button button-big button-raised color-bluegray" value="CLEAR"></a>
+                </div>
+                <div class="col-50">
+                    <a href="#" class="form-to-data"><input type="submit" name="submit" class="button button-big button-raised button-fill color-bluegray" value="ADD GAME"></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- EOf Page Content -->
+
+</div>
+<!-- EOf Page-add-game -->
