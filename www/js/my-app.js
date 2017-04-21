@@ -2,13 +2,15 @@
 var myApp = new Framework7({
 	material: true,
 	modalTitle: 'Table Tenis',
-	pushState : true
+	pushState : true,
+	init: false // prevent app from automatic initialization
+
 });
 // Export selectors engine
 var $$ = Dom7;
 // Add view
 var mainView = myApp.addView('.view-main', {
-	// domCache: true //enable inline pages
+	domCache: true //enable inline pages
 
 });
 // Initialize Firebase
@@ -25,7 +27,7 @@ firebase.initializeApp(config);
 var uiConfig = {
 
 		credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-		signInSuccessUrl: 'index.html',
+		signInSuccessUrl: '#index',
 		signInOptions: [
 			firebase.auth.EmailAuthProvider.PROVIDER_ID,
 			firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -43,13 +45,6 @@ var ui = new firebaseui.auth.AuthUI(firebase.auth());
 var database = firebase.database();
 var player_ref = database.ref('PlayerProfile/');
 var user = firebase.auth().currentUser;
-
-
-window.addEventListener('load', function() {
-	authState('load');
-	// playerContentIndex(3, 'rating');
-});
-
 
 $$(document).on('page:init', function(e) {
 	var user = firebase.auth().currentUser;
@@ -76,7 +71,7 @@ $$(document).on('page:init', function(e) {
 
 	}
 	if (page.name === 'add-game') {
-
+		// authState(page.name);
 		if (user != null) {
 
 		opponentName=page.query.opponentName;
@@ -119,12 +114,20 @@ $$(document).on('page:init', function(e) {
 
 });
 
+myApp.init();
+//
+// window.addEventListener('load', function() {
+// 	// authState('load');
+// 	// playerContentIndex(3, 'rating');
+// });
+
+
 //Log Out function
 $$('.log-out').on('click', function(e) {
 
 	firebase.auth().signOut();
 	// authState('index');
-	mainView.router.loadPage('index.html');
+	mainView.router.loadPage('#index');
 	alert('Sign Out Successful');
 
 });
@@ -431,8 +434,9 @@ function playerContent(sort) {
 };
 
 function playerContentIndex(list_no, sort) {
-	var player_ref = database.ref('PlayerProfile/');
-	player_ref.orderByChild(sort).limitToLast(list_no).once("value", function(snapshot) {
+	$$('.player-list-index').find('ul').html('');
+	var player_ref = database.ref('PlayerProfile/').limitToLast(list_no);
+	player_ref.orderByChild(sort).once("value", function(snapshot) {
 	snapshot.forEach(function(player_snap) {
 		var ratings = player_snap.child("rating").val();
 		var players = player_snap.child("displayName").val();
@@ -537,7 +541,7 @@ function loginRedirect() {
       {
         text: 'Cancel',
         onClick: function() {
-          mainView.router.loadPage('index.html');
+          mainView.router.loadPage('#index');
         }
       },
     ]
