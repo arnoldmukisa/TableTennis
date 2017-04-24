@@ -2,7 +2,7 @@
 var myApp = new Framework7({
 	material: true,
 	modalTitle: 'Table Tenis',
-	pushState : true,
+	pushState : true,// to enable back button on app
 	init: false // prevent app from automatic initialization
 
 });
@@ -27,12 +27,12 @@ firebase.initializeApp(config);
 var uiConfig = {
 
 		credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-		signInSuccessUrl: '#index',
+		signInSuccessUrl: 'index.html',
 		signInOptions: [
 			firebase.auth.EmailAuthProvider.PROVIDER_ID,
-			firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-			firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-			firebase.auth.TwitterAuthProvider.PROVIDER_ID
+			// firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+			// firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+			// firebase.auth.TwitterAuthProvider.PROVIDER_ID
 		],
 		// Terms of service url.
 		tosUrl: 'services.html'
@@ -50,6 +50,7 @@ $$(document).on('page:init', function(e) {
 	var user = firebase.auth().currentUser;
 	var name, email, photoUrl, uid, emailVerified;
 	var page = e.detail.page;
+
 	// Player Page
 	if (page.name === 'index') {
 		authState(page.name);
@@ -71,11 +72,13 @@ $$(document).on('page:init', function(e) {
 
 	}
 	if (page.name === 'add-game') {
-		// authState(page.name);
+		console.log(page.name + ' initialized');
+
 		if (user != null) {
 
 		opponentName=page.query.opponentName;
 		name = user.displayName;
+
 		loadAddGame();
 		$$('.welcomeName').html('Hi' + ' ' + name);
 		keyboardScrollFix(page);//fix toolbar floating over keyboard
@@ -120,14 +123,25 @@ myApp.init();
 // 	// authState('load');
 // 	// playerContentIndex(3, 'rating');
 // });
-
+// myApp.onPageReinit(pageName, callback(page))
+// myApp.onPageReinit('add-game', loadAddGame());
 
 //Log Out function
 $$('.log-out').on('click', function(e) {
 
 	firebase.auth().signOut();
 	// authState('index');
-	mainView.router.loadPage('#index');
+	mainView.router.loadPage({
+		url: 'index.html', // - in case you use Ajax pages
+  // 		pageName: 'index', // - in case you use Inline Pages or domCache
+		ignoreCache:true
+	});
+	mainView.router.back({
+		//   url: 'index.html', // - in case you use Ajax pages
+		  pageName: 'index', // - in case you use Inline Pages or domCache
+		  force: true,
+		  ignoreCache:true
+});
 	alert('Sign Out Successful');
 
 });
@@ -143,6 +157,7 @@ function loadAddGame() {
 	var autocompleteDropdownAll = myApp.autocomplete({
 		input: '#autocomplete-dropdown-all',
 		openIn: 'dropdown',
+		cache:false,
 		source: function(autocomplete, query, render) {
 
 			var results = [];
@@ -161,16 +176,59 @@ function loadAddGame() {
 
 		}
 	});
+
+	$$('.form-to-data').on('click', formFunction);
+
+}// ========================End of loadAddGame================================
 		// End of Opponents Name field
 	function validateScores(opponent_score,user_score,opponent_name) {
 
-			if (!opponent_score || !user_score || !opponent_name) {
-			myApp.alert('field is empty...');
-			return;
+		var	diffInScore = Math.abs(user_score - opponent_score);
+
+			if (!opponent_score) {
+			myApp.alert('Opponent Score is empty...');
+			return false;
 			}
+			if (!user_score) {
+			myApp.alert('Your Score is empty...');
+			return false;
+			}
+			if (!opponent_name) {
+			myApp.alert('No Opponent selected...');
+			return false;
+			}
+			if (user_score == opponent_score) {
+			myApp.alert('You cant have equal scores...');
+			return false;
+			}
+			if (user_score<11 && opponent_score<11) {
+				myApp.alert('One of the players need to reach 11...');
+			return false;
+			}
+
+			if (user_score>=11 || opponent_score>=11){
+
+				if (diffInScore>=2) {
+
+					return true;
+				}
+				else {
+				myApp.alert('The difference in scores has to be greater than or equal to 2...');
+				return false;
+				}
+			}
+
+
+		// return true;
 	}
-//Getting data from Form
-	$$('.form-to-data').on('click', function() {
+
+	$$('input[type="text"]').on('keyup keydown change', function (e) {
+  		console.log('input value changed');
+	});
+
+
+	function formFunction() {
+		var user = firebase.auth().currentUser;
 
 		//Current User Data
 		var UserformData = myApp.formToData('#UserScoreForm'); // formData is an Object
@@ -183,16 +241,39 @@ function loadAddGame() {
 		var opponent_name = OpponentformData["OpponentName"];
 		var opponent_score = parseInt(OpponentformData["OpponentScore"]);
 
-		validateScores(opponent_score,user_score,opponent_name);
+		$$('input[type="text"]').on('keyup keydown change', function (e) {
+	  		console.log('opponent_name :::' + opponent_name);
+			console.log('user_score :::' + user_score);
+			console.log('opponent_score :::' + opponent_score);
+		});
 
-		player_ref.orderByChild("displayName").equalTo(opponent_name).on("child_added", function(snapshot) {
 
-			opponent_uid = snapshot.key;
-			opponent_rating = snapshot.val().rating;
-			opponent_matches = snapshot.val().matches;
+		if (validateScores(opponent_score,user_score,opponent_name)) {
 
-			pushGame();
-		}); //End of player_ref opponent_uid
+			player_ref.orderByChild("displayName").limitToLast(1).equalTo(opponent_name).once("child_added", function(snapshot) {
+
+				opponent_uid = snapshot.key;
+				opponent_rating = snapshot.val().rating;
+				opponent_matches = snapshot.val().matches;
+				pushGame();
+
+			}, function(error) {
+				  // The callback failed.
+				  console.error(error);
+				  console.log('error');
+
+				}); //End of player_ref opponent_uid
+
+		}else {
+			console.log('val failed');
+			mainView.router.back({
+				//   url: 'index.html', // - in case you use Ajax pages
+				  pageName: 'add-game', // - in case you use Inline Pages or domCache
+				  force: true,
+				  ignoreCache:true
+		});
+			// return
+		}
 
 	function findWinner() {
 
@@ -231,7 +312,7 @@ function loadAddGame() {
 		updateMatches(opponent_uid);
 
 		alert("Game Added!");
-		mainView.router.loadPage('timeline.html');
+		mainView.router.loadPage('#timeline');
 
 	} //End of push Game function
 
@@ -309,8 +390,8 @@ function loadAddGame() {
 			var Stats = Games.child('Stats');
 			var time_stamp =firebase.database.ServerValue.TIMESTAMP;
 
-			Game.push({
-				// date: firebase.database.ServerValue.TIMESTAMP,
+			Game.push().set({
+
 				added_by:user_uid,
 				user_score:user_score,
 				user_name:user_name,
@@ -319,6 +400,19 @@ function loadAddGame() {
 				opponent_score:opponent_score,
 				status:'pending',
 				date:time_stamp
+			}, function(error) {
+			  if (error)
+			    console.log('Error has occured during saving process')
+			  else
+			    console.log("Data has been saved succesfully")
+
+				var updates = {};
+
+				updates['PlayerProfile/' + winner_uid + '/rating'] = Math.round10(new_winner_rating,-2);
+				updates['PlayerProfile/' + loser_uid + '/rating'] = Math.round10(new_loser_rating,-2);
+
+				return database.ref().update(updates);
+
 			})
 
 			Stats.push({
@@ -333,13 +427,6 @@ function loadAddGame() {
 					loser_name: loser_name
 
 			});
-
-			var updates = {};
-
-			updates['PlayerProfile/' + winner_uid + '/rating'] = Math.round10(new_winner_rating,-2);
-			updates['PlayerProfile/' + loser_uid + '/rating'] = Math.round10(new_loser_rating,-2);
-
-			return database.ref().update(updates);
 
 		});
 	}
@@ -358,8 +445,7 @@ function loadAddGame() {
 		});
 	}
 
-	});//==========End of on-form-click====/
-}// ========================End of Add Page Init================================
+	};//==========End of on-form-click====/
 
 function authState(page) {
 	firebase.auth().onAuthStateChanged(function(user) {
@@ -535,13 +621,19 @@ function loginRedirect() {
       {
         text: 'Login',
         onClick: function() {
-          mainView.router.loadPage('login-screen.html');
+          mainView.router.loadPage('#login-screen');
         }
       },
       {
         text: 'Cancel',
         onClick: function() {
-          mainView.router.loadPage('#index');
+		mainView.router.back({
+				//   url: 'index.html', // - in case you use Ajax pages
+				  pageName: 'index', // - in case you use Inline Pages or domCache
+				  force: true,
+				  ignoreCache:true
+		});
+        //   mainView.router.loadPage('#index');
         }
       },
     ]
