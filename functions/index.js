@@ -10,9 +10,13 @@ admin.initializeApp(functions.config().firebase);
  * Followers add a flag to `/followers/{followedUid}/{followerUid}`.
  * Users save their device notification tokens to `/users/{followedUid}/notificationTokens/{notificationToken}`.
  */
-exports.sendFollowerNotification = functions.database.ref('/Games/Game/').onWrite(event => {
-  const added_by ="ELcagiXsc8g0jw7VorGECeZeEN43";
-  const opponent_uid = event.params.opponent_uid;
+exports.sendFollowerNotification = functions.database.ref('Games/Game/{game_uid}').onWrite(event => {
+  // const added_by =event.data.val().added_by;
+  const opponent_uid = event.data.child('opponent_uid').val();
+  const game_uid = event.params.game_uid;
+  var added_by = event.data.child('added_by').val();
+
+
   // If un-follow we exit the function.
   if (!event.data.val()) {
     return console.log('User ', followerUid, 'un-followed user', followedUid);
@@ -20,7 +24,7 @@ exports.sendFollowerNotification = functions.database.ref('/Games/Game/').onWrit
   console.log('We have a new game UID:', added_by, 'for user:', opponent_uid);
 
   // Get the list of device notification tokens.
-  const getDeviceTokensPromise = admin.database().ref(`/users/${opponent_uid}/notificationTokens`).once('value');
+  const getDeviceTokensPromise = admin.database().ref(`/users/${opponent_uid}`).once('value');
 
   // Get the follower profile.
   const getFollowerProfilePromise = admin.auth().getUser(added_by);
