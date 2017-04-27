@@ -2,7 +2,7 @@
 var myApp = new Framework7({
 	material: true,
 	modalTitle: 'Table Tenis',
-	pushState : true,// to enable back button on app
+	// pushState : true,// to enable back button on app
 	init: false // prevent app from automatic initialization
 
 });
@@ -307,11 +307,15 @@ function loadAddGame() {
 	function pushGame() {
 
 		findWinner();
-		calculateRating();
-		updateMatches(user_uid);
-		updateMatches(opponent_uid);
+		// calculateRating();
+		if (calculateRating()) {
 
-		alert("Game Added!");
+			updateMatches(user_uid);
+			updateMatches(opponent_uid);
+
+		}
+
+		// alert("Game Added!");
 		mainView.router.loadPage('#timeline');
 
 	} //End of push Game function
@@ -368,7 +372,7 @@ function loadAddGame() {
 				new_loser_rating = (loser_rating - changeInRating);
 				console.log('old loser rating  ' + loser_rating + 'updated loser rating ' + new_loser_rating);
 
-				myApp.alert('New Rating : '+ Math.round10(new_winner_rating,-2), 'Game Stats');
+				console.log('New Rating : '+ Math.round10(new_winner_rating,-2), 'Game Stats');
 				// myApp.alert('Your New Rating is :' + new_winner_rating);
 
 			} else if (winner_rating == loser_rating) {
@@ -379,10 +383,12 @@ function loadAddGame() {
 
 				new_winner_rating = (winner_rating + pointsAwarded);
 				new_loser_rating = (loser_rating - pointsAwarded);
-				myApp.alert(new_winner_rating + ': Same Rating Players ' + new_loser_rating);
+				console.log(new_winner_rating + ': Same Rating Players ' + new_loser_rating);
 
 			} else {
 				myApp.alert('Something is wrong')
+
+				return false;
 			}
 
 			var Games = database.ref('Games/');
@@ -400,18 +406,38 @@ function loadAddGame() {
 				opponent_score:opponent_score,
 				status:'pending',
 				date:time_stamp
-			}, function(error) {
-			  if (error)
-			    console.log('Error has occured during saving process')
-			  else
-			    console.log("Data has been saved succesfully")
+			}, function (error) {
+			  if (error){
+				  console.log('Error has occured during saving process')
 
-				var updates = {};
+  				return false;
 
-				updates['PlayerProfile/' + winner_uid + '/rating'] = Math.round10(new_winner_rating,-2);
-				updates['PlayerProfile/' + loser_uid + '/rating'] = Math.round10(new_loser_rating,-2);
+			  }
+			  else{
+				console.log("Data has been saved succesfully")
 
-				return database.ref().update(updates);
+  				var updates = {};
+
+				new_winner_rating = Math.round10(new_winner_rating,-2);
+				new_loser_rating= Math.round10(new_loser_rating,-2)
+
+  				updates['PlayerProfile/' + winner_uid + '/rating'] = new_winner_rating;
+  				updates['PlayerProfile/' + loser_uid + '/rating'] = new_loser_rating;
+
+				if(user_uid==winner_uid){
+					new_user_rating = new_winner_rating;
+					}
+				else if(user_uid==loser_uid){
+					new_user_rating=new_loser_rating
+				}
+
+				myApp.addNotification({
+  			        message: 'Game Has been added. Your new rating is :'+ new_user_rating,
+  			    });
+
+  				return database.ref().update(updates);
+
+			  }
 
 			})
 
@@ -429,6 +455,15 @@ function loadAddGame() {
 			});
 
 		});
+
+			return true;
+	}
+	function notify(){
+
+		myApp.addNotification({
+			message: 'You have been added to a game',
+		});
+
 	}
 
 	function updateMatches(uid) {
@@ -440,7 +475,7 @@ function loadAddGame() {
 
 		var updates = {};
 		updates['PlayerProfile/' + uid + '/matches'] = updated_matches;
-		// updates['PlayerProfile/' + uid2 + '/matches'] = new_matches;
+
 		return database.ref().update(updates);
 		});
 	}
@@ -592,6 +627,7 @@ function displayWelcomeBar(status) {
 
 function createNewProfile(uid,displayName) {
 	var player_ref = database.ref('PlayerProfile/');
+	var player_ref2 = database.ref('PlayerProfile/key');
 	player_ref.once('value', function(snapshot) {
 
 	if (snapshot.hasChild(uid)) {
@@ -609,6 +645,16 @@ function createNewProfile(uid,displayName) {
 		alert("Profle Created!");
 	}
 });
+
+	player_ref2.once('value', function(snapshot) {
+		console.log(snapshot.val());
+	if (snapshot.hasChild(displayName)) {
+		snapshot.val();
+	console.log('displayName Exists');
+
+	}
+
+	});
 }
 
 function loginRedirect() {
@@ -650,10 +696,18 @@ function gamesTimeline(name) {
 	matches= snapshot.val().matches;
 	console.log(matches);
 	$$('.matches').html(matches);
-
 	getGameData(user_uid);
 
-});
+}, function(error) {
+	  // The callback failed.
+	  if (error) {
+	  	  console.error(error);
+		  console.log('error');
+	  }else {
+
+	  }
+
+	});
 
 function getGameData(user_uid) {
 
@@ -676,7 +730,9 @@ function getGameData(user_uid) {
 				displayGameData(date,user_name,user_score,opponent_name,opponent_score);
 				}
 		});
-	});
+	}
+
+);
 }
 
 }//End of gamesTimeline
