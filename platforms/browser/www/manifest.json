@@ -1,0 +1,13 @@
+{
+  "short_name": "Table Tennis",
+  "name": "CMU Table Tennis Rating System",
+  "display": "standalone",
+  "Theme_color":  "#4caf50",
+  "start_url":"/?utm_source=homescreen",
+  "icons":
+    [{
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "700x700"
+    }]
+}
