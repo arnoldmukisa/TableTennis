@@ -59,10 +59,7 @@ function requestPermission(uid) {
 	.then(function(token) {
 		console.log(token);
 
-		var player_ref = database.ref('PlayerProfile/' + uid+'/notification');
-		player_ref.set({
-			notificationToken: token
-		});
+		firebase.database().ref('PlayerProfile/' + uid + '/notificationTokens/' + token).set(true);
 
 	})
 	.catch(function(err) {
@@ -72,7 +69,10 @@ function requestPermission(uid) {
 }
 
 messaging.onMessage(function(payload) {
-	console.log(payload);
+	// console.log(payload.notification.body);
+	myApp.addNotification({
+		message: payload.notification.body
+	});
 })
 
 
@@ -150,13 +150,7 @@ $$(document).on('page:init', function(e) {
 });
 
 myApp.init();
-//
-// window.addEventListener('load', function() {
-// 	// authState('load');
-// 	// playerContentIndex(3, 'rating');
-// });
-// myApp.onPageReinit(pageName, callback(page))
-// myApp.onPageReinit('add-game', loadAddGame());
+
 
 //Log Out function
 $$('.log-out').on('click', function(e) {
@@ -660,7 +654,7 @@ function displayWelcomeBar(status) {
 
 function createNewProfile(uid,displayName) {
 	var player_ref = database.ref('PlayerProfile/');
-	var player_ref2 = database.ref('PlayerProfile/key');
+	// var player_ref2 = database.ref('PlayerProfile/key');
 	player_ref.once('value', function(snapshot) {
 
 	if (snapshot.hasChild(uid)) {
@@ -679,15 +673,15 @@ function createNewProfile(uid,displayName) {
 	}
 });
 
-	player_ref2.once('value', function(snapshot) {
-		console.log(snapshot.val());
-	if (snapshot.hasChild(displayName)) {
-		snapshot.val();
-	console.log('displayName Exists');
-
-	}
-
-	});
+	// player_ref2.once('value', function(snapshot) {
+	// 	console.log(snapshot.val());
+	// if (snapshot.hasChild(displayName)) {
+	// 	snapshot.val();
+	// console.log('displayName Exists');
+	//
+	// }
+	//
+	// });
 }
 
 function loginRedirect() {
@@ -723,7 +717,7 @@ function loginRedirect() {
 function gamesTimeline(name) {
 
 	var player_ref = database.ref('PlayerProfile/');
-	player_ref.orderByChild("displayName").limitToLast(1).equalTo(name).on("child_changed", function(snapshot) {
+	player_ref.orderByChild("displayName").limitToLast(1).equalTo(name).on("child_added", function(snapshot) {
 
 	user_uid = snapshot.key;
 	matches= snapshot.val().matches;
@@ -772,25 +766,25 @@ function getGameData(user_uid) {
 
 function displayGameData(date,user_name,user_score,opponent_name,opponent_score) {
 	var timelineItem =	'<div class="timeline-item">'+
-											'<div class="timeline-item-date">'+ '<small>'+'</small></div>'+
-											'<div class="timeline-item-divider"></div>'+
-											'<div class="timeline-item-content">'+
-											'<div class="timeline-item-inner">'+
-									    '<div class="timeline-item-time">'+date+'</div>'+
-									    '<div class="timeline-item-subtitle">'+
-									    '<div class="chip">'+
-			                    '<div class="chip-media bg-red">'+user_score+'</div>'+
-			                    '<div class="chip-label">'+user_name+'</div>'+
-			                    '</div>'+
-									    '<div class="timeline-item-subtitle">'+
-									    '<div class="chip">'+
-			                    '<div class="chip-media bg-bluegray">'+opponent_score+'</div>'+
-			                    '<div class="chip-label">'+opponent_name+'</div>'+
-			                    '</div>'+
-									    '</div>'+
-											'</div>'+
-											'</div>'+
-											'</div>'
+						'<div class="timeline-item-date">'+ '<small>'+'</small></div>'+
+						'<div class="timeline-item-divider"></div>'+
+						'<div class="timeline-item-content">'+
+						'<div class="timeline-item-inner">'+
+					    '<div class="timeline-item-time">'+date+'</div>'+
+					    '<div class="timeline-item-subtitle">'+
+					    '<div class="chip">'+
+			            '<div class="chip-media bg-red">'+user_score+'</div>'+
+			            '<div class="chip-label">'+user_name+'</div>'+
+			            '</div>'+
+							    '<div class="timeline-item-subtitle">'+
+							    '<div class="chip">'+
+			            '<div class="chip-media bg-bluegray">'+opponent_score+'</div>'+
+			            '<div class="chip-label">'+opponent_name+'</div>'+
+			            '</div>'+
+				    	'</div>'+
+						'</div>'+
+						'</div>'+
+						'</div>'
 
 	$$('.timeline-loop').prepend(timelineItem);
 }
