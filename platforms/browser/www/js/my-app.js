@@ -46,10 +46,42 @@ var database = firebase.database();
 var player_ref = database.ref('PlayerProfile/');
 var user = firebase.auth().currentUser;
 
+
+var messaging = firebase.messaging();
+
+function requestPermission(uid) {
+
+	messaging.requestPermission()
+	.then(function() {
+	  console.log('Notification permission granted.');
+	 	return messaging.getToken()
+	})
+	.then(function(token) {
+		console.log(token);
+
+		var player_ref = database.ref('PlayerProfile/' + uid+'/notification');
+		player_ref.set({
+			notificationToken: token
+		});
+
+	})
+	.catch(function(err) {
+	  console.log('Unable to get permission to notify.', err);
+	})
+
+}
+
+messaging.onMessage(function(payload) {
+	console.log(payload);
+})
+
+
+
 $$(document).on('page:init', function(e) {
 	var user = firebase.auth().currentUser;
 	var name, email, photoUrl, uid, emailVerified;
 	var page = e.detail.page;
+
 
 	// Player Page
 	if (page.name === 'index') {
@@ -503,6 +535,7 @@ function authState(page) {
 			});
 
 		createNewProfile(uid,displayName);//Create Profile Table if does not exists
+		requestPermission(uid);
 		}
 		else {// User is signed out.
 
