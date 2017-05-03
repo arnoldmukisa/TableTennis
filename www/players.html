@@ -1,16 +1,13 @@
-<!-- AddGame Page-->
-<div data-page="players" class="page toolbar-fixed cached">
+<!-- Players Page-->
+<div data-page="players" class="page toolbar-fixed ">
     <!-- Add Game Navbar-->
     <div class="navbar">
-        <div class="navbar-inner cached" data-page="players">
+        <div class="navbar-inner" data-page="players">
             <!-- We have index navbar without left link-->
             <div class="left">
-                <!-- <a href="#index" class="back link icon-only" data-reload="true" data-ignore-cache="true">
-                    <i class="icon icon-back"></i>
-                </a> -->
                 <a href="#" class="link icon-only open-panel" data-panel="right"> <i class="icon icon-bars"></i></a>
             </div>
-            <div class="center">PLAYERS</div>
+            <div class="center">Players</div>
             <div class="right">
                 <!-- Right link contains only icon - additional "icon-only" class-->
                   <a href="#" class="link icon-only open-popover" data-popover=".popover-links">
@@ -23,7 +20,7 @@
     <!-- AddGame Toolbar-->
     <div class="toolbar tabbar tabbar-labels-fixed">
       <div class="toolbar-inner">
-          <a href="#index" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">home</i>
+          <a href="index.html" class="link" ><i class="icon f7-icons">home</i>
           <!-- <span class="tabbar-label">Home</span> -->
           </a>
           <a href="add-game.html" class="link"><i class="icon f7-icons">add_round</i>
@@ -32,13 +29,13 @@
           <a href="players.html" class="link active"><i class="icon f7-icons">persons</i>
             <!-- <span class="tabbar-label">Players</span> -->
           </a>
-          <a href="timeline.html" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">time</i>
+          <a href="timeline.html" class="link" ><i class="icon f7-icons">time</i>
             <!-- <span class="tabbar-label">Timeline</span> -->
           </a>
       </div>
     </div>
     <!-- EOf AddGame toolbar -->
-    <form class="searchbar">
+    <!-- <form class="searchbar">
         <div class="searchbar-input">
             <input type="search" placeholder="Search">
             <a href="#" class="searchbar-clear"></a>
@@ -46,10 +43,19 @@
         <a href="#" class="searchbar-cancel">Cancel</a>
     </form>
 
-    <div class="searchbar-overlay"></div>
+    <div class="searchbar-overlay"></div> -->
 
     <!-- Scrollable page content-->
     <div class="page-content ">
+        <form class="searchbar">
+            <div class="searchbar-input">
+                <input type="search" placeholder="Search">
+                <a href="#" class="searchbar-clear"></a>
+            </div>
+            <a href="#" class="searchbar-cancel">Cancel</a>
+        </form>
+
+        <div class="searchbar-overlay"></div>
 
       <div class="popover popover-links">
          <div class="popover-angle"></div>
@@ -75,11 +81,8 @@
             <ul>
 
             </ul>
-            <!-- <div class="list-block-label">
-            </div> -->
         </div>
-
     </div>
     <!-- EOf Page Content -->
 </div>
-<!-- EOf Page-AddGame -->
+<!-- EOf Page-Players -->
