@@ -1,8 +1,8 @@
-<!-- add-game Page-->
-<div data-page="add-game" class="page toolbar-fixed cached">
+<!-- Add-game Page-->
+<div data-page="add-game" class="page toolbar-fixed">
     <!-- Add Game Navbar-->
     <div class="navbar">
-        <div class="navbar-inner cached" data-page="add-game">
+        <div class="navbar-inner" data-page="add-game">
             <!-- We have index navbar without left link-->
             <div class="left">
                 <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
@@ -10,17 +10,17 @@
             <div class="center">Add Game</div>
                 <!-- Right link contains only icon - additional "icon-only" class-->
                 <div class="right">
-				<a href="#" class="link icon-only open-popover" data-popover=".popover-links">
-						<i class="f7-icons">more_vertical</i>
-				</a>
-            </div>
+                    <a href="#" class="link icon-only open-popover" data-popover=".popover-links">
+                        <i class="f7-icons">more_vertical</i>
+                    </a>
+                </div>
         </div>
     </div>
     <!-- EOf add-game Navbar -->
     <!-- add-game Toolbar-->
     <div class="toolbar tabbar tabbar-labels-fixed">
       <div class="toolbar-inner">
-          <a href="#index" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">home</i>
+          <a href="index.html" class="link" ><i class="icon f7-icons">home</i>
           <!-- <span class="tabbar-label">Home</span> -->
           </a>
           <a href="add-game.html" class="link active"><i class="icon f7-icons">add_round</i>
@@ -29,7 +29,7 @@
           <a href="players.html" class="link"><i class="icon f7-icons">persons</i>
             <!-- <span class="tabbar-label">Players</span> -->
           </a>
-          <a href="timeline.html" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">time</i>
+          <a href="timeline.html" class="link" ><i class="icon f7-icons">time</i>
             <!-- <span class="tabbar-label">Timeline</span> -->
           </a>
       </div>
@@ -37,7 +37,7 @@
     <!-- EOf add-game toolbar -->
 
     <!-- Scrollable page content-->
-    <div class="page-content pull-to-refresh-content" data-ptr-distance="55">
+    <div class="page-content">
 
       <div class="popover popover-links">
          <div class="popover-angle"></div>
@@ -54,11 +54,7 @@
            </div>
          </div>
        </div>
-        <!-- Default pull to refresh layer-->
-        <div class="pull-to-refresh-layer">
-            <div class="preloader"></div>
-            <div class="pull-to-refresh-arrow"></div>
-        </div>
+
         <div class="content-block-title">Enter Game Scores:</div>
 
         <div class="card">
@@ -74,7 +70,7 @@
                                 <div class="item-content inset">
                                 <div class="item-media"><i class="icon f7-icons">compose</i></div>
                                     <div class="item-inner">
-                                        <div class="item-title label">Enter Your Score</div>
+                                        <div class="item-title floating-label">Enter Your Score</div>
                                         <div class="item-input">
                                             <input type="text" name="UserScore" id="" placeholder="Your Score Here">
                                         </div>
@@ -101,9 +97,9 @@
                                 <div class="item-content">
                                 <div class="item-media"><i class="icon f7-icons">persons_fill</i></div>
                                     <div class="item-inner">
-                                        <div class="item-title label">Find Opponent's Name</div>
+                                        <div class="item-title floating-label">Find Opponent's Name</div>
                                         <div class="item-input">
-                                            <input type="text" name="OpponentName" placeholder="Player's Names" id="autocomplete-dropdown-all">
+                                            <input type="text" class="OpponentName" name="OpponentName" placeholder="Player's Names" id="autocomplete-dropdown-all">
                                         </div>
                                     </div>
                                 </div>
@@ -112,7 +108,7 @@
                                 <div class="item-content">
                                 <div class="item-media"><i class="icon f7-icons">compose</i></div>
                                     <div class="item-inner">
-                                        <div class="item-title label">Enter Opponnent's Score</div>
+                                        <div class="item-title floating-label">Enter Opponnent's Score</div>
                                         <div class="item-input">
                                             <input type="text" name="OpponentScore" placeholder="Opponent's Score">
                                         </div>
@@ -138,6 +134,5 @@
 
     </div>
     <!-- EOf Page Content -->
-
 </div>
 <!-- EOf Page-add-game -->
