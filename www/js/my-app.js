@@ -6,11 +6,12 @@ var myApp = new Framework7({
 	init: false // prevent app from automatic initialization
 
 });
+
 // Export selectors engine
 var $$ = Dom7;
 // Add view
 var mainView = myApp.addView('.view-main', {
-	domCache: true //enable inline pages
+	// domCache: true //enable inline pages
 
 });
 // Initialize Firebase
@@ -29,7 +30,12 @@ var uiConfig = {
 		credentialHelper: firebaseui.auth.CredentialHelper.NONE,
 		signInSuccessUrl: 'index.html',
 		signInOptions: [
-			firebase.auth.EmailAuthProvider.PROVIDER_ID,
+			{
+            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            // Whether the display name should be displayed in the Sign Up page.
+            requireDisplayName: true
+          	}
+			// firebase.auth.EmailAuthProvider.PROVIDER_ID,
 			// firebase.auth.GoogleAuthProvider.PROVIDER_ID,
 			// firebase.auth.FacebookAuthProvider.PROVIDER_ID,
 			// firebase.auth.TwitterAuthProvider.PROVIDER_ID
@@ -81,10 +87,17 @@ $$(document).on('page:init', function(e) {
 	var user = firebase.auth().currentUser;
 	var name, email, photoUrl, uid, emailVerified;
 	var page = e.detail.page;
-
+	var opponentName=page.query.opponentName;
+	// if (!user) {
+	// 	if (page.name==='add-game') {
+	// 		loginRedirect();
+	// 		return
+	// 	}
+	// }
 
 	// Player Page
 	if (page.name === 'index') {
+
 		authState(page.name);
 		playerContentIndex(3, 'rating');
 
@@ -104,7 +117,7 @@ $$(document).on('page:init', function(e) {
 
 	}
 	if (page.name === 'add-game') {
-		console.log(page.name + ' initialized');
+		console.log(page.name + ' initialized');//check when page is loaded from cache
 
 		if (user != null) {
 
@@ -113,11 +126,12 @@ $$(document).on('page:init', function(e) {
 
 		loadAddGame();
 		$$('.welcomeName').html('Hi' + ' ' + name);
+		$$('.form-to-data').on('click', formFunction);
 		keyboardScrollFix(page);//fix toolbar floating over keyboard
-		if(opponentName!=null){
-			$$('#autocomplete-dropdown-all').val(opponentName);
-		}
 
+			if(opponentName!=null){
+				$$('#autocomplete-dropdown-all').val(opponentName);
+			}//Auto complete form if add game is loaded from opponnet page
 		}
 		else{
 
@@ -151,25 +165,12 @@ $$(document).on('page:init', function(e) {
 
 myApp.init();
 
-
 //Log Out function
 $$('.log-out').on('click', function(e) {
 
 	firebase.auth().signOut();
-	// authState('index');
-	mainView.router.loadPage({
-		url: 'index.html', // - in case you use Ajax pages
-  // 		pageName: 'index', // - in case you use Inline Pages or domCache
-		ignoreCache:true
-	});
-	mainView.router.back({
-		//   url: 'index.html', // - in case you use Ajax pages
-		  pageName: 'index', // - in case you use Inline Pages or domCache
-		  force: true,
-		  ignoreCache:true
-});
+	mainView.router.loadPage('index.html');
 	alert('Sign Out Successful');
-
 });
 
 // =================Add Game Page=====================
@@ -191,19 +192,17 @@ function loadAddGame() {
 
 			player_ref.on("value", function(snapshot) {
 				snapshot.forEach(function(player_snap) {
-					// var uid = player_snap.child("uid").val();
+
 					var playerName = player_snap.child("displayName").val();
 					if ((playerName.toLowerCase().indexOf(query.toLowerCase()) >= 0) && playerName!=user.displayName)
 						results.push(playerName);
-					// console.log(displayName);
 				});
 				render(results)
 			});
-
 		}
 	});
 
-	$$('.form-to-data').on('click', formFunction);
+	// $$('.form-to-data').on('click', formFunction);
 
 }// ========================End of loadAddGame================================
 		// End of Opponents Name field
@@ -231,11 +230,9 @@ function loadAddGame() {
 				myApp.alert('One of the players need to reach 11...');
 			return false;
 			}
-
 			if (user_score>=11 || opponent_score>=11){
 
 				if (diffInScore>=2) {
-
 					return true;
 				}
 				else {
@@ -244,13 +241,19 @@ function loadAddGame() {
 				}
 			}
 
+			$$('input[type="text"]').on('keyup keydown change', function (e) {
 
-		// return true;
+				var opponent_ref = database.ref('PlayerProfile/').child('displayName').equalTo(opponent_name);
+				opponent_ref.on('value', function (snapshot) {
+
+					var opponent_rating_ref = snapshot.val().rating;
+					$$('opponent_rating').html(opponent_rating);
+					console.log(opponent_rating);
+
+				})
+		  		console.log('input value changed');
+			});
 	}
-
-	$$('input[type="text"]').on('keyup keydown change', function (e) {
-  		console.log('input value changed');
-	});
 
 
 	function formFunction() {
@@ -266,13 +269,6 @@ function loadAddGame() {
 		var OpponentformData = myApp.formToData('#OpponentScoreForm');
 		var opponent_name = OpponentformData["OpponentName"];
 		var opponent_score = parseInt(OpponentformData["OpponentScore"]);
-
-		$$('input[type="text"]').on('keyup keydown change', function (e) {
-	  		console.log('opponent_name :::' + opponent_name);
-			console.log('user_score :::' + user_score);
-			console.log('opponent_score :::' + opponent_score);
-		});
-
 
 		if (validateScores(opponent_score,user_score,opponent_name)) {
 
@@ -290,22 +286,19 @@ function loadAddGame() {
 
 				}); //End of player_ref opponent_uid
 
-		}else {
+		}
+		else {
 			console.log('val failed');
 			mainView.router.back({
-				//   url: 'index.html', // - in case you use Ajax pages
 				  pageName: 'add-game', // - in case you use Inline Pages or domCache
 				  force: true,
 				  ignoreCache:true
-		});
-			// return
+			  });
 		}
 
 	function findWinner() {
 
-		console.log('12 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
 		if (user_score > opponent_score) {
-			console.log('13 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
 
 			winner_score = user_score;
 			winner_uid = user_uid;
@@ -314,11 +307,10 @@ function loadAddGame() {
 			loser_score = opponent_score;
 			loser_uid = opponent_uid;
 			loser_name = opponent_name;
-			console.log();
-			('User Won with :' + winner_score + ' Opponent lost with:' + loser_score);
+			console.log('User Won with :' + winner_score + ' Opponent lost with:' + loser_score);
 
 		} else {
-			console.log('14 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
+
 			winner_score = opponent_score;
 			winner_uid = opponent_uid;
 			winner_name = opponent_name;
@@ -333,122 +325,65 @@ function loadAddGame() {
 	function pushGame() {
 
 		findWinner();
-		// calculateRating();
-		if (calculateRating()) {
+
+		if (calculate()) {
 
 			updateMatches(user_uid);
 			updateMatches(opponent_uid);
+			mainView.router.loadPage('timeline.html');
 
 		}
-
-		// alert("Game Added!");
-		mainView.router.loadPage('#timeline');
-
+		else {
+			myApp.alert('Something Went Wrong! Game was not added')
+		}
 	} //End of push Game function
 
-	function calculateRating() {
+	function calculate() {
 
 		//Evaluate winner rating and loser rating
 		database.ref('/PlayerProfile/' + user_uid).once('value').then(function(snapshot) {
 
 			var user_rating = snapshot.val().rating;
 
-			console.log('1 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
-
 			if (user_score > opponent_score) {
-				console.log(' 2 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
-
-				console.log('Winner is ' + user_name + ' with as score of ' + user_score);
 
 				winner_rating = user_rating;
 				loser_rating = opponent_rating;
-				// myApp.alert('user_rating:' + winner_rating + 'opponent_rating:' + loser_rating);
-
-			} else {
-				console.log(' 3 This is the user_score at the point ' + user_score + 'This is the opponent_score ' + opponent_score);
-				console.log('Winner is ' + opponent_name + 'with as score of ' + opponent_score);
+			}
+			else {
 
 				winner_rating = opponent_rating;
 				loser_rating = user_rating
-
-				// myApp.alert('user_rating:' + loser_rating + 'opponent_rating:' + winner_rating);
 			}
 
 			points = (winner_score - loser_score);
 
-			console.log('points ' + points);
-
 			var diffInRatings = (winner_rating - loser_rating);
-
-			console.log('diffInRating :' + diffInRatings);
-
 			var changeInRating = ((0.000128 * (diffInRatings * diffInRatings)) - (0.064 * diffInRatings) + 8);
 
-			console.log('changeInRating :' + changeInRating);
-
 			if (winner_rating != loser_rating) {
-				pointsAwarded = (points / 10);
-				console.log(' Points Awarded  ' + pointsAwarded);
 
+				pointsAwarded = (points / 10);
 				totalPoints=Math.round10(pointsAwarded+changeInRating,-2);
-
 				new_winner_rating = (winner_rating + changeInRating + pointsAwarded);
-				console.log('old winner rating  ' + winner_rating + ' updated winner rating ' + new_winner_rating);
-
 				new_loser_rating = (loser_rating - changeInRating);
-				console.log('old loser rating  ' + loser_rating + 'updated loser rating ' + new_loser_rating);
 
-				console.log('New Rating : '+ Math.round10(new_winner_rating,-2), 'Game Stats');
-				// myApp.alert('Your New Rating is :' + new_winner_rating);
+			}
+			else if (winner_rating == loser_rating) {
 
-			} else if (winner_rating == loser_rating) {
 				pointsAwarded = (points / 10);
-				console.log(' 2 pointsAwarded  ' + pointsAwarded);
-
 				totalPoints=Math.round10(pointsAwarded,-2);
-
 				new_winner_rating = (winner_rating + pointsAwarded);
 				new_loser_rating = (loser_rating - pointsAwarded);
-				console.log(new_winner_rating + ': Same Rating Players ' + new_loser_rating);
 
-			} else {
+			}
+			else {
 				myApp.alert('Something is wrong')
-
 				return false;
 			}
 
-			var Games = database.ref('Games/');
-			var Game = Games.child('Game');
-			var Stats = Games.child('Stats');
-			var time_stamp =firebase.database.ServerValue.TIMESTAMP;
-
-			Game.push().set({
-
-				added_by:user_uid,
-				user_score:user_score,
-				user_name:user_name,
-				opponent_uid:opponent_uid,
-				opponent_name:opponent_name,
-				opponent_score:opponent_score,
-				status:'pending',
-				date:time_stamp
-			}, function (error) {
-			  if (error){
-				  console.log('Error has occured during saving process')
-
-  				return false;
-
-			  }
-			  else{
-				console.log("Data has been saved succesfully")
-
-  				var updates = {};
-
-				new_winner_rating = Math.round10(new_winner_rating,-2);
-				new_loser_rating= Math.round10(new_loser_rating,-2)
-
-  				updates['PlayerProfile/' + winner_uid + '/rating'] = new_winner_rating;
-  				updates['PlayerProfile/' + loser_uid + '/rating'] = new_loser_rating;
+			new_winner_rating = Math.round10(new_winner_rating,-2);
+			new_loser_rating= Math.round10(new_loser_rating,-2)
 
 				if(user_uid==winner_uid){
 					new_user_rating = new_winner_rating;
@@ -457,46 +392,56 @@ function loadAddGame() {
 					new_user_rating=new_loser_rating
 				}
 
+			var game_ref = database.ref('Games/').child('Game');
+			var time_stamp =firebase.database.ServerValue.TIMESTAMP;
+
+			game_ref.push({
+
+				added_by:user_uid,
+				user_score:user_score,
+				user_name:user_name,
+				user_rating:new_user_rating,
+				opponent_uid:opponent_uid,
+				opponent_name:opponent_name,
+				opponent_score:opponent_score,
+				opponent_rating:new_loser_rating,
+				status:'pending',
+				date:time_stamp
+
+			},
+			function (error) {
+			  if (error){
+
+				console.log('Error has occured during saving process')
+  				return false;
+			  }
+			  else{
+
+				console.log("Data has been saved succesfully")
+  				var updates = {};
+
+  				updates['PlayerProfile/' + winner_uid + '/rating'] = new_winner_rating;
+  				updates['PlayerProfile/' + loser_uid + '/rating'] = new_loser_rating;
+
 				myApp.addNotification({
   			        message: 'Game Has been added. Your new rating is :'+ new_user_rating,
   			    });
 
   				return database.ref().update(updates);
-
 			  }
-
 			})
-
-			Stats.push({
-
-					date:time_stamp,
-					winner_score: winner_score,
-					winner_uid: winner_uid,
-					winner_name: winner_name,
-					new_winner_rating: new_winner_rating,
-					loser_score: loser_score,
-					loser_uid: loser_uid,
-					loser_name: loser_name
-
-			});
-
 		});
 
-			return true;
-	}
-	function notify(){
-
-		myApp.addNotification({
-			message: 'You have been added to a game',
-		});
-
+	return true;
 	}
 
-	function updateMatches(uid) {
+};//==========End of on-form-click====/
+
+function updateMatches(uid) {
 
 	matches_ref = database.ref('/PlayerProfile/' + uid).once('value').then(function(snapshot) {
-		var current_matches = snapshot.val().matches;
 
+		var current_matches = snapshot.val().matches;
 		updated_matches = current_matches + 1;
 
 		var updates = {};
@@ -504,9 +449,7 @@ function loadAddGame() {
 
 		return database.ref().update(updates);
 		});
-	}
-
-	};//==========End of on-form-click====/
+}
 
 function authState(page) {
 	firebase.auth().onAuthStateChanged(function(user) {
@@ -563,16 +506,16 @@ function playerContent(sort) {
 		var match = matches;
 		// List item html
 		var itemHTML = 	'<a href="timeline.html?name='+player+'" class="item-link">'+
-										'<li class="item-content">' +
-										'<div class="item-media"><img src="' + picURL + '" width="44"/></div>' +
-										'<div class="item-inner">' +
-										'<div class="item-title-row">' +
-										'<div class="item-title">' + player + '</div>' +
-										'</div>' +
-										'<div class="item-subtitle">' + '|' + match + '|' + '	' + rating + '</div>' +
-										'</div>' +
-										'</li>'+
-										'</a>';
+						'<li class="item-content">' +
+						'<div class="item-media"><img src="' + picURL + '" width="44"/></div>' +
+						'<div class="item-inner">' +
+						'<div class="item-title-row">' +
+						'<div class="item-title">' + player + '</div>' +
+						'</div>' +
+						'<div class="item-subtitle">' + '|' + match + '|' + '	' + rating + '</div>' +
+						'</div>' +
+						'</li>'+
+						'</a>';
 		// Prepend new list element
 		$$('.player-list').find('ul').prepend(itemHTML);
 		// When loading done, we need to reset it
@@ -582,9 +525,10 @@ function playerContent(sort) {
 };
 
 function playerContentIndex(list_no, sort) {
-	$$('.player-list-index').find('ul').html('');
+
 	var player_ref = database.ref('PlayerProfile/').limitToLast(list_no);
-	player_ref.orderByChild(sort).once("value", function(snapshot) {
+	player_ref.orderByChild(sort).on("value", function(snapshot) {
+	$$('.player-list-index').find('ul').html('');
 	snapshot.forEach(function(player_snap) {
 		var ratings = player_snap.child("rating").val();
 		var players = player_snap.child("displayName").val();
@@ -622,23 +566,26 @@ function displayWelcomeBar(status) {
 						'<div class="center card-content ratingHome " style="font-size: 21px; font-weight: 100;"></div>'+
 						'<div class="right"></div>'+
 						'</div>';
-		// Prepend new list element
-		if (status=='show') {
+	// Prepend new list element
+	if (status=='show') {
 
-			$$('.welcomeCard').html(welcomeHTML);
-			// $$('.navTitle').html()
-
-		}
-
-		else if (status=='hide') {
-
-			welcomeHTML ='';
-			$$('.welcomeCard').html(welcomeHTML);
-			$$('.navTitle').html('Table Tennis')
-		}
+		$$('.welcomeCard').html(welcomeHTML);
+		// $$('.navTitle').html()
 
 	}
-	displayRatingHome = function(uid,page) {
+	else if (status=='hide') {
+
+		welcomeHTML ='';
+		$$('.welcomeCard').html(welcomeHTML);
+		$$('.navTitle').html('Table Tennis')
+	}
+	else {
+		console.log('status var in displayWelcomeBar() is',status);
+	}
+
+}
+
+displayRatingHome = function(uid,page) {
 	var player_ref_uid = database.ref('PlayerProfile/'+uid);
 	player_ref_uid.on("value", function(snapshot) {
 
@@ -649,39 +596,31 @@ function displayWelcomeBar(status) {
 		$$('.navTitle').html(displayName);
 		$$('.ratingHome').html('|'+matches+'|'+' '+rating);
 
-});
+	});
 }
 
 function createNewProfile(uid,displayName) {
+
 	var player_ref = database.ref('PlayerProfile/');
-	// var player_ref2 = database.ref('PlayerProfile/key');
 	player_ref.once('value', function(snapshot) {
+		if (snapshot.hasChild(uid)) {
 
-	if (snapshot.hasChild(uid)) {
+			console.log('Profile Exists');
+		}
+		else if(uniqueDisplayName()){
+			var new_player_ref = database.ref('PlayerProfile/' + uid);
+			new_player_ref.set({
+				rating: 1000,
+				matches: 0,
+				displayName: displayName
+			});
+			alert("Profle Created!");
+		}
+	});
+}
 
-		console.log('Profile Exists');
-
-	}
-	else {
-		var new_player_ref = database.ref('PlayerProfile/' + uid);
-		new_player_ref.set({
-			rating: 1000,
-			matches: 0,
-			displayName: displayName
-		});
-		alert("Profle Created!");
-	}
-});
-
-	// player_ref2.once('value', function(snapshot) {
-	// 	console.log(snapshot.val());
-	// if (snapshot.hasChild(displayName)) {
-	// 	snapshot.val();
-	// console.log('displayName Exists');
-	//
-	// }
-	//
-	// });
+function uniqueDisplayName() {
+	return true;
 }
 
 function loginRedirect() {
@@ -700,13 +639,15 @@ function loginRedirect() {
       {
         text: 'Cancel',
         onClick: function() {
-		mainView.router.back({
-				//   url: 'index.html', // - in case you use Ajax pages
-				  pageName: 'index', // - in case you use Inline Pages or domCache
-				  force: true,
-				  ignoreCache:true
-		});
-        //   mainView.router.loadPage('#index');
+		// mainView.router.back({
+		// 		//   url: 'index.html', // - in case you use Ajax pages
+		// 		  pageName: 'index', // - in case you use Inline Pages or domCache
+		// 		  force: true,
+		// 		  ignoreCache:true
+		// });
+		// $$('.view-main .page-on-left').remove();
+		// myApp.removeFromCache('#add-game')
+          mainView.router.loadPage('index.html');
         }
       },
     ]

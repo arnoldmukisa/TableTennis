@@ -1,16 +1,13 @@
-<!-- AddGame Page-->
-<div data-page="timeline" class="page toolbar-fixed cached">
-    <!-- Add Game Navbar-->
+<!-- Timeline Page-->
+<div data-page="timeline" class="page toolbar-fixed ">
+    <!-- Timeline Navbar-->
     <div class="navbar">
-        <div class="navbar-inner cached" data-page="players">
+        <div class="navbar-inner" data-page="timeline">
             <!-- We have index navbar without left link-->
             <div class="left">
-                <!-- <a href="#index" class="link icon-only">
-                    <i class="icon icon-back"></i>
-                </a> -->
                 <a href="#" class="link icon-only open-panel" data-panel="right"> <i class="icon icon-bars"></i></a>
             </div>
-            <div class="center">TimeLine</div>
+            <div class="center">Timeline</div>
             <div class="right">
                 <!-- Right link contains only icon - additional "icon-only" class-->
                 <a href="#" class="link icon-only open-popover" data-popover=".popover-links">
@@ -19,17 +16,17 @@
             </div>
         </div>
     </div>
-    <!-- EOf AddGame Navbar -->
-    <a href="add-game.html" data-page="index" class="floating-button">
+    <!-- EOf Timeline Navbar -->
+    <a href="add-game.html" data-page="timeline" class="floating-button">
       <i class="icon icon-plus"></i>
     </a>
-    <!-- AddGame Toolbar-->
+    <!-- Timeline Toolbar-->
     <div class="toolbar tabbar tabbar-labels-fixed">
       <div class="toolbar-inner">
-          <a href="#index" class="link"><i class="icon f7-icons">home</i>
+          <a href="index.html" class="link"><i class="icon f7-icons">home</i>
           <!-- <span class="tabbar-label">Home</span> -->
           </a>
-          <a href="add-game.html" class="link" data-reload="true" data-ignore-cache="true"><i class="icon f7-icons">add_round</i>
+          <a href="add-game.html" class="link"><i class="icon f7-icons">add_round</i>
           <!-- <span class="tabbar-label">Add Game</span> -->
           </a>
           <a href="players.html" class="link"><i class="icon f7-icons">persons</i>
@@ -40,7 +37,7 @@
           </a>
       </div>
     </div>
-    <!-- EOf AddGame toolbar -->
+    <!-- EOf Timeline toolbar -->
 
     <!-- Scrollable page content-->
     <div class="page-content timeline-list">
@@ -66,27 +63,22 @@
                 Your Rating is 1000
             </div>
 
-
             <div class="timeline">
-                <!-- Timeline item -->
-                      <div class="content-block">
-                        <div class="content-block-title">
-                            <div class="matches"></div> Games
-                        </div>
-                      </div>
-
-                    <!-- Timeline item with special timeline elements -->
-
-                    <!-- Timeline item with special timeline elements and inner -->
-                    <div class="timeline-loop">
-
-                    </div>
-                    <!-- end of loop -->
+        <!-- Timeline item -->
+              <div class="content-block">
+                <div class="content-block-title">
+                    <div class="matches"></div> Games
+                </div>
+              </div>
+            <!-- Timeline item with special timeline elements and inner -->
+                <div class="timeline-loop">
 
                 </div>
+            <!-- end of loop -->
+              </div>
                 <!-- end of content block -->
             </div>
         </div>
         <!-- EOf Page Content -->
-    </div>
-    <!-- EOf Page-timelinea -->
+</div>
+<!-- EOf Page-timeline -->
