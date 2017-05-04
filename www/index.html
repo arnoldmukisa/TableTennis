@@ -7,13 +7,19 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>Table Tennis</title>
-		<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 		<link rel="stylesheet" href="css/framework7.material.min.css">
 		<link rel="stylesheet" href="css/framework7.material.colors.min.css">
+		<!-- <link rel="stylesheet" href="css/material-icons.css"> -->
+
+
 		<!-- Path to your custom app styles-->
+		<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"> -->
 		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css" />
-		<link rel="stylesheet" href="css/framework7-icons.css">
 		<link rel="stylesheet" href="css/my-app.css">
+		<!-- <link rel="stylesheet" href="css/framework7-icons.css"> -->
 		<link rel="manifest" href="/manifest.json">
 		<!-- <link rel="stylesheet" href="css/framework7.3dpanels.css"> -->
 		<!-- <script type="text/javascript" src="js/test.js"></script> -->
@@ -43,7 +49,7 @@
 							<li>
 								<a href="#login-screen" class="item-link sign-in auth close-panel">
 									<div class="item-content">
-										<div class="item-media"><i class="f7-icons">login</i></div>
+										<div class="item-media"><i class="material-icons">login</i></div>
 										<div class="item-inner">
 										<div class="item-title loginLink" id="login-screen"></div>
 										</div>
@@ -53,7 +59,7 @@
 							<li>
 								<a href="add-game.html" class="item-link close-panel">
 									<div class="item-content">
-									<div class="item-media"><i class="f7-icons">add_round_fill</i></div>
+									<div class="item-media"><i class="material-icons">add_circle</i></div>
 									<div class="item-inner">
 									<div class="item-title">Add Game</div>
 									</div>
@@ -63,7 +69,7 @@
 							<li>
 								<a href="players.html" class="item-link close-panel">
 									<div class="item-content">
-									<div class="item-media"><i class="f7-icons">persons_fill</i></div>
+									<div class="item-media"><i class="material-icons">person</i></div>
 									<div class="item-inner">
 									<div class="item-title">Leader Board</div>
 									</div>
@@ -73,7 +79,7 @@
 							<li>
 								<a href="timeline.html" class="item-link timelineLink close-panel">
 									<div class="item-content">
-									<div class="item-media"><i class="f7-icons">time_fill</i></div>
+									<div class="item-media"><i class="material-icons">timeline</i></div>
 									<div class="item-inner">
 									<div class="item-title">Timeline</div>
 									</div>
@@ -82,7 +88,7 @@
 							</li><li>
 								<a href="#" class="item-link log-out close-panel">
 									<div class="item-content">
-									<div class="item-media"><i class="f7-icons">log_out</i></div>
+									<div class="item-media"><i class="material-icons">log_out</i></div>
 									<div class="item-inner">
 									<div class="item-title">Logout</div>
 									</div>
@@ -100,7 +106,7 @@
 			<!-- Your main view, should have "view-main" class-->
 			<div class="view view-main">
 				<!-- Pages, -->
-				<div class="pages navbar-fixed toolbar-fixed">
+				<div class="pages navbar-fixed">
 					<!-- Page, data-page contains page name-->
 					<div data-page="index" class="page">
 						<!-- Top Navbar-->
@@ -114,43 +120,36 @@
 									</a>
 								</div>
 								<div class="navTitle center"></div>
-
 								<div class="right">
-									<a href="#" class="link icon-only open-popover" data-popover=".popover-links">
-										<i class="f7-icons">more_vertical</i>
+									<a href="#" class="link open-popover" data-popover=".popover-links">
+										<i class="icon material-icons">more_vert</i>
 									</a>
 								</div>
 							</div>
+							<div class="subnavbar">
+			          <div class="buttons-row">
+			            <a href="index.html" class="button active"><i class="icon material-icons">home</i></a>
+			            <a href="add-game.html" class="button"><i class="icon material-icons">add_circle</i></a>
+			            <a href="players.html" class="button"><i class="icon material-icons">person</i></a>
+			            <a href="timeline.html" class="button" ><i class="icon material-icons">timeline</i></a>
+			          </div>
+			        </div>
 						</div>
 						<!-- End of Top Nav Bar -->
-						<div class="toolbar tabbar tabbar-labels-fixed">
-							<div class="toolbar-inner">
-									<a href="index.html" class="link active"><i class="icon f7-icons">home</i>
-									<!-- <span class="tabbar-label">Home</span> -->
-									</a>
-									<a href="add-game.html" class="link"><i class="icon f7-icons">add_round</i>
-									<!-- <span class="tabbar-label">Add Game</span> -->
-									</a>
-									<a href="players.html" class="link"><i class="icon f7-icons">persons</i>
-										<!-- <span class="tabbar-label">Players</span> -->
-									</a>
-									<a href="timeline.html" class="link" ><i class="icon f7-icons">time</i>
-										<!-- <span class="tabbar-label">Timeline</span> -->
-									</a>
-							</div>
-						</div>
+
 						<!-- Floating Action Button -->
 						<a href="add-game.html"  data-page="index" class="floating-button">
 							<i class="icon icon-plus"></i>
 						</a>
 						<!-- EOf Floating Action Button -->
-						<!-- Scrollable page content-->
-						<div class="page-content hide-toolbar-on-scroll">
 
+						<!-- Scrollable page content-->
+						<div class="page-content with-subnavbar hide-bars-on-scroll">
 
 							<div class="welcomeCard">
 
 							</div>
+
 							<div class="popover popover-links">
 				         <div class="popover-angle"></div>
 				         <div class="popover-inner">
@@ -194,7 +193,7 @@
 									<li>
 										<a href="#login-screen" class="item-link sign-in auth">
 											<div class="item-content">
-												<div class="item-media"><i class="f7-icons">login</i></div>
+												<div class="item-media"><i class="material-icons">login</i></div>
 												<div class="item-inner">
 													<div class="item-title loginLink" id="login-screen"></div>
 												</div>
@@ -204,7 +203,7 @@
 									<li>
 										<a href="add-game.html" class="item-link">
 											<div class="item-content">
-												<div class="item-media"><i class="f7-icons">add_round_fill</i></div>
+												<div class="item-media"><i class="material-icons">add_circle</i></div>
 												<div class="item-inner">
 													<div class="item-title">Add Game</div>
 												</div>
@@ -214,7 +213,7 @@
 									<li>
 										<a href="players.html" class="item-link">
 											<div class="item-content">
-												<div class="item-media"><i class="f7-icons">persons_fill</i></div>
+												<div class="item-media"><i class="material-icons">person</i></div>
 												<div class="item-inner">
 													<div class="item-title">Players</div>
 												</div>
@@ -224,7 +223,7 @@
 									<li>
 										<a href="timeline.html" class="item-link timelineLink">
 											<div class="item-content">
-												<div class="item-media"><i class="f7-icons">time_fill</i></div>
+												<div class="item-media"><i class="material-icons">timeline</i></div>
 												<div class="item-inner">
 													<div class="item-title">Timeline</div>
 												</div>

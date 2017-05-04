@@ -52,7 +52,6 @@ var database = firebase.database();
 var player_ref = database.ref('PlayerProfile/');
 var user = firebase.auth().currentUser;
 
-
 var messaging = firebase.messaging();
 
 function requestPermission(uid) {
@@ -141,6 +140,7 @@ $$(document).on('page:init', function(e) {
 		}
 	}
 	if (page.name === 'timeline') {
+		authState(page.name);
 		player = page.query.name;
 		console.log(player);
 		if (player!=null) {
@@ -561,17 +561,22 @@ function playerContentIndex(list_no, sort) {
 };
 
 function displayWelcomeBar(status) {
-	var welcomeHTML=	'<div class="center card-header bg-green color-white">'+
-						'<div class="left"></div>'+
-						'<div class="center card-content ratingHome " style="font-size: 21px; font-weight: 100;"></div>'+
-						'<div class="right"></div>'+
-						'</div>';
+	var welcomeHTML=	'<div class="card-header bg-green">'+
+										'<div class="center chip">'+
+										'<div class="chip-media bg-bluegray matchesHome"></div>'+
+    								'<div class="chip-label ratingHome color-white" style="font-size: 18px; font-weight: 100;"></div>'+
+										'</div>';
+
+	var timelineHTML='<div class="center chip">'+
+										'<div class="chip-media bg-bluegray matchesHome"></div>'+
+    								'<div class="chip-label ratingHome color-white" style="font-size: 18px; font-weight: 100;"></div>';
+
 	// Prepend new list element
 	if (status=='show') {
 
 		$$('.welcomeCard').html(welcomeHTML);
 		// $$('.navTitle').html()
-
+		$$('.timelineBar').html(timelineHTML)
 	}
 	else if (status=='hide') {
 
@@ -594,7 +599,11 @@ displayRatingHome = function(uid,page) {
 	var displayName=snapshot.val().displayName;
 
 		$$('.navTitle').html(displayName);
-		$$('.ratingHome').html('|'+matches+'|'+' '+rating);
+		$$('.ratingHome').html(rating);
+		$$('.matchesHome').html(matches);
+		if (page==='timeline') {
+
+		}
 
 	});
 }
