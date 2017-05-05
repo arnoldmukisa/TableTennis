@@ -53,35 +53,61 @@
 
             </div>
          </div>
-         <div class="buttons-row">
+         <div class="buttons-row tabbar">
+           <!-- <div class="new-place"> -->
           <!-- Link to 1st tab, active -->
           <a href="#pending" class="tab-link active button">Pending</a>
           <!-- Link to 2nd tab -->
           <a href="#tab2" class="tab-link button">Approved</a>
           <!-- Link to 3rd tab -->
           <a href="#tab3" class="tab-link button">Graph</a>
+           <!-- </div> -->
+        </div>
+
+        <div class="tabs-swipeable-wrap swiper-container swiper-container-horizontal">
+          <div class="tabs swiper-wrapper">
+            <div id="pending" class="tab active">
+              <div class="timeline">
+          <!-- Timeline item -->
+                <div class="content-block">
+                  <div class="content-block-title">
+                      You have played <span class="matches"></span> games <br><br>
+                      Position is <span class="position">nr</span> of <span class="total">nr</span>
+                  </div>
+                </div>
+              <!-- Timeline item with special timeline elements and inner -->
+                  <div class="timeline-loop">
+
+                  </div>
+              <!-- end of loop -->
+                </div>
+                  <!-- end of content block -->
+
+            </div>
+            <div id="approved" class="tab">
+              <div class="timeline">
+          <!-- Timeline item -->
+                <div class="content-block">
+                  <div class="content-block-title">
+                      You have played <span class="matches"></span> games <br><br>
+                      Position is <span class="position">nr</span> of <span class="total">nr</span>
+                  </div>
+                </div>
+              <!-- Timeline item with special timeline elements and inner -->
+                  <div class="timeline-loop">
+
+                  </div>
+              <!-- end of loop -->
+                </div>
+                  <!-- end of content block -->
+
+            </div>
+
+          </div>
         </div>
 
 
-            <div class="tabs">
-              <div id="pending" class="tab active">
-                <div class="timeline">
-            <!-- Timeline item -->
-                  <div class="content-block">
-                    <div class="content-block-title">
-                        <div class="matches"></div> Games
-                    </div>
-                  </div>
-                <!-- Timeline item with special timeline elements and inner -->
-                    <div class="timeline-loop">
 
-                    </div>
-                <!-- end of loop -->
-                  </div>
-                    <!-- end of content block -->
-
-              </div>
-            </div>
             <!-- End of Tab -->
             </div>
         </div>

@@ -142,6 +142,9 @@ $$(document).on('page:init', function(e) {
 	if (page.name === 'timeline') {
 		authState(page.name);
 		player = page.query.name;
+
+		$$('a.tab-link.active').addClass('button-fill');
+
 		console.log(player);
 		if (player!=null) {
 			name = player;
@@ -828,3 +831,4 @@ function keyboardScrollFix(page) {
 	}
 
 }
+$$('tab-link').hasClass('active')
