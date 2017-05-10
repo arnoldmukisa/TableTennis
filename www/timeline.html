@@ -54,19 +54,15 @@
             </div>
          </div>
          <div class="buttons-row tabbar">
-           <!-- <div class="new-place"> -->
           <!-- Link to 1st tab, active -->
-          <a href="#pending" class="tab-link active button">Pending</a>
+          <a href="#approved" class="tab-link active button">Games</a>
           <!-- Link to 2nd tab -->
-          <a href="#tab2" class="tab-link button">Approved</a>
-          <!-- Link to 3rd tab -->
-          <a href="#tab3" class="tab-link button">Graph</a>
-           <!-- </div> -->
+          <a href="#pending" class="tab-link button">Pending</a>
         </div>
 
         <div class="tabs-swipeable-wrap swiper-container swiper-container-horizontal">
           <div class="tabs swiper-wrapper">
-            <div id="pending" class="tab active">
+            <div id="approved" class="tab active">
               <div class="timeline">
           <!-- Timeline item -->
                 <div class="content-block">
@@ -84,17 +80,16 @@
                   <!-- end of content block -->
 
             </div>
-            <div id="approved" class="tab">
+            <div id="pending" class="tab">
               <div class="timeline">
           <!-- Timeline item -->
                 <div class="content-block">
                   <div class="content-block-title">
-                      You have played <span class="matches"></span> games <br><br>
-                      Position is <span class="position">nr</span> of <span class="total">nr</span>
+                      You have <span class="matches-pending">0</span> pending games<br><br>
                   </div>
                 </div>
               <!-- Timeline item with special timeline elements and inner -->
-                  <div class="timeline-loop">
+                  <div class="timeline-loop-pending">
 
                   </div>
               <!-- end of loop -->
@@ -105,8 +100,6 @@
 
           </div>
         </div>
-
-
 
             <!-- End of Tab -->
             </div>

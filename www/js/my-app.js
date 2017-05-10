@@ -143,7 +143,7 @@ $$(document).on('page:init', function(e) {
 		authState(page.name);
 		player = page.query.name;
 
-		$$('a.tab-link.active').addClass('button-fill');
+		// $$('a.tab-link.active').addClass('button-fill');
 
 		console.log(player);
 		if (player!=null) {
@@ -168,6 +168,7 @@ $$(document).on('page:init', function(e) {
 
 myApp.init();
 
+// $$('a.tab-link.active').addClass('button-fill');
 //Log Out function
 $$('.log-out').on('click', function(e) {
 
