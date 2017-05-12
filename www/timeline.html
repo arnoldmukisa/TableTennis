@@ -1,5 +1,5 @@
 <!-- Timeline Page-->
-<div data-page="timeline" class="page toolbar-fixed ">
+<div data-page="timeline" class="page">
     <!-- Timeline Navbar-->
     <div class="navbar">
         <div class="navbar-inner" data-page="timeline">
@@ -9,38 +9,28 @@
             </div>
             <div class="center">Timeline</div>
             <div class="right">
-                <!-- Right link contains only icon - additional "icon-only" class-->
                 <a href="#" class="link icon-only open-popover" data-popover=".popover-links">
-                    <i class="f7-icons">more_vertical</i>
+                    <i class="material-icons">more_vert</i>
                 </a>
             </div>
+        </div>
+        <div class="subnavbar">
+          <div class="buttons-row">
+            <a href="index.html" class="button"><i class="icon material-icons">home</i></a>
+            <a href="add-game.html" class="button"><i class="icon material-icons">add_circle</i></a>
+            <a href="players.html" class="button"><i class="icon material-icons">person</i></a>
+            <a href="timeline.html" class="button active" ><i class="icon material-icons">timeline</i></a>
+          </div>
         </div>
     </div>
     <!-- EOf Timeline Navbar -->
     <a href="add-game.html" data-page="timeline" class="floating-button">
       <i class="icon icon-plus"></i>
     </a>
-    <!-- Timeline Toolbar-->
-    <div class="toolbar tabbar tabbar-labels-fixed">
-      <div class="toolbar-inner">
-          <a href="index.html" class="link"><i class="icon f7-icons">home</i>
-          <!-- <span class="tabbar-label">Home</span> -->
-          </a>
-          <a href="add-game.html" class="link"><i class="icon f7-icons">add_round</i>
-          <!-- <span class="tabbar-label">Add Game</span> -->
-          </a>
-          <a href="players.html" class="link"><i class="icon f7-icons">persons</i>
-            <!-- <span class="tabbar-label">Players</span> -->
-          </a>
-          <a href="timeline.html" class="link active"><i class="icon f7-icons">time</i>
-            <!-- <span class="tabbar-label">Timeline</span> -->
-          </a>
-      </div>
-    </div>
-    <!-- EOf Timeline toolbar -->
+
 
     <!-- Scrollable page content-->
-    <div class="page-content timeline-list">
+    <div class="page-content with-subnavbar hide-bars-on-scroll timeline-list">
 
       <div class="popover popover-links">
          <div class="popover-angle"></div>
@@ -59,24 +49,59 @@
        </div>
 
         <div class="demo-card-header-pic">
-            <div style="background-image:url(img/ic_face_black_48px.svg)" valign="bottom" class="card-header color-white  no-border">
-                Your Rating is 1000
+            <div style="background-image:url(img/ic_face_black_48px.svg)" valign="bottom" class="card-header color-white bg-bluegray no-border timelineBar">
+
+            </div>
+         </div>
+         <div class="buttons-row tabbar">
+          <!-- Link to 1st tab, active -->
+          <a href="#approved" class="tab-link active button">Games</a>
+          <!-- Link to 2nd tab -->
+          <a href="#pending" class="tab-link button">Pending</a>
+        </div>
+
+        <div class="tabs-swipeable-wrap swiper-container swiper-container-horizontal">
+          <div class="tabs swiper-wrapper">
+            <div id="approved" class="tab active">
+              <div class="timeline">
+          <!-- Timeline item -->
+                <div class="content-block">
+                  <div class="content-block-title">
+                      You have played <span class="matches"></span> games <br><br>
+                      Position is <span class="position">nr</span> of <span class="total">nr</span>
+                  </div>
+                </div>
+              <!-- Timeline item with special timeline elements and inner -->
+                  <div class="timeline-loop">
+
+                  </div>
+              <!-- end of loop -->
+                </div>
+                  <!-- end of content block -->
+
+            </div>
+            <div id="pending" class="tab">
+              <div class="timeline">
+          <!-- Timeline item -->
+                <div class="content-block">
+                  <div class="content-block-title">
+                      You have <span class="matches-pending">0</span> pending games <br><br>
+                  </div>
+                </div>
+              <!-- Timeline item with special timeline elements and inner -->
+                  <div class="timeline-loop-pending">
+
+                  </div>
+              <!-- end of loop -->
+                </div>
+                  <!-- end of content block -->
+
             </div>
 
-            <div class="timeline">
-        <!-- Timeline item -->
-              <div class="content-block">
-                <div class="content-block-title">
-                    <div class="matches"></div> Games
-                </div>
-              </div>
-            <!-- Timeline item with special timeline elements and inner -->
-                <div class="timeline-loop">
+          </div>
+        </div>
 
-                </div>
-            <!-- end of loop -->
-              </div>
-                <!-- end of content block -->
+            <!-- End of Tab -->
             </div>
         </div>
         <!-- EOf Page Content -->

@@ -11,3 +11,7 @@
   font-size: 36px;
 
 }*/
+.tabbar a.tab-link.active, .tabbar a.tab-link.active-state, html:not(.watch-active-state) .tabbar a.tab-link:active {
+    background-color: #4caf50;
+    color: #fff;
+}
